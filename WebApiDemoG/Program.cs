@@ -1,13 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using WebApiDemoG.Data;
+using WebApiDemoG.Formatters;
 using WebApiDemoG.Repositories.Abstract;
 using WebApiDemoG.Repositories.Concrete;
 using WebApiDemoG.Services.Abstract;
+using WebApiDemoG.Services.Asbtract;
 using WebApiDemoG.Services.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddControllers(options =>
+{
+    options.OutputFormatters.Add(new VCardOutputFormatter());
+    options.OutputFormatters.Add(new TextCsvOutputFormatter());
+    options.InputFormatters.Add(new TextCsvInputFormatter());
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,6 +30,7 @@ builder.Services.AddDbContext<StudentDBContext>(opt =>
 });
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+
 
 var app = builder.Build();
 

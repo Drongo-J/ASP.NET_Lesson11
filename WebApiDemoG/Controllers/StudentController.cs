@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApiDemoG.Dtos;
 using WebApiDemoG.Entities;
+using WebApiDemoG.Models;
 using WebApiDemoG.Services.Abstract;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,13 +20,31 @@ namespace WebApiDemoG.Controllers
         }
 
         // GET: api/<StudentController>
+        //[HttpGet]
+        //public IEnumerable<StudentDto> Get()
+        //{
+        //    var items = _studentService.GetAll();
+        //    var dataToReturn = items.Select(a =>
+        //    {
+        //        return new StudentDto
+        //        {
+        //            Id = a.Id,
+        //            Age = a.Age,
+        //            Fullname = a.Fullname,
+        //            Score = a.Score,
+        //            SeriaNo = a.SeriaNo
+        //        };
+        //    });
+        //    return dataToReturn;
+        //}
+
         [HttpGet]
-        public IEnumerable<StudentDto> Get()
+        public List<StudentModel> Get()
         {
-            var items = _studentService.GetAll();
+            var items = _studentService.GetAll().ToList();
             var dataToReturn = items.Select(a =>
             {
-                return new StudentDto
+                return new StudentModel
                 {
                     Id = a.Id,
                     Age = a.Age,
@@ -33,9 +52,10 @@ namespace WebApiDemoG.Controllers
                     Score = a.Score,
                     SeriaNo = a.SeriaNo
                 };
-            });
+            }).ToList();
             return dataToReturn;
         }
+
 
         // GET: api/<StudentController>
         [HttpGet("Best")]
@@ -58,10 +78,10 @@ namespace WebApiDemoG.Controllers
 
         // GET api/<StudentController>/5
         [HttpGet("{id}")]
-        public StudentDto Get(int id)
+        public StudentModel Get(int id)
         {
             var item=_studentService.Get(id);
-            var dataToReturn = new StudentDto
+            var dataToReturn = new StudentModel
             {
                 Id = item.Id,
                 SeriaNo = item.SeriaNo,
@@ -74,7 +94,7 @@ namespace WebApiDemoG.Controllers
 
         // POST api/<StudentController>
         [HttpPost]
-        public IActionResult Post([FromBody] StudentDto value)
+        public IActionResult Post([FromBody] StudentModel value)
         {
             try
             {
